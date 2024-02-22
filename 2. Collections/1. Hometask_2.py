@@ -45,10 +45,9 @@ example: {'a_1': 5, 'b': 7, 'c': 35, 'g_2': 42}
 
 unique_dict = {}  # Creating dictionary for storing only unique keys from all of dictionaries
 duplicated_dict = {}  # Creating dictionary for storing only duplicated keys from all of dictionaries
-duplicated_keynames = []
+duplicated_keynames = []  # Creating separate list for storing duplicated keys from all dictionaries
 
-all_keys = [key for my_dict in dict_list for key in
-            my_dict]  # Creating list of all keys from all dictionaries from dict_list
+all_keys = [key for my_dict in dict_list for key in my_dict]  # Creating list of all keys from all dictionaries
 
 duplicated_keys = set([key for key in all_keys if all_keys.count(key) > 1])  # Finding only duplicated keys
 
