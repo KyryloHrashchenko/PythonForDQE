@@ -1,4 +1,4 @@
-import re  # Importing regular expressions modules
+import re  # Importing regular expressions module
 
 
 def replace_iz(text):
