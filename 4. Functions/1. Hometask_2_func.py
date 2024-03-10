@@ -26,13 +26,13 @@ def create_dict():  # creating function for generating dictionaries with random 
     return new_dict  # Returning our created dictionary
 
 
-def rand_dicts(d_list):
-    num_dicts = randint(2, 10)  # Variable for randomising number of dictionaries for list
+def rand_dicts(d_list, minimum, maximum):
+    num_dicts = randint(minimum, maximum)  # Variable for randomising number of dictionaries for list
     for i in range(num_dicts):  # Loop for filling our lists with random number of dictionaries
         d_list.append(create_dict())  # Appending list with dictionaries, that are created using create_dict() function
 
 
-rand_dicts(dict_list)
+rand_dicts(dict_list, 2, 10)
 
 """
 
