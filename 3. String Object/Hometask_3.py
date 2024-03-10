@@ -72,7 +72,7 @@ for position in tabs_positions:
 tabs_s[0] = '\u00A0' + tabs_s[0]
 # Joining sentences for final result
 new_text_with_tabs = "".join(tabs_s)
-# Coutung number if whitespaces and spaces for old (default) text and new text
+# Counting number if whitespaces and spaces for old (default) text and new text
 count_whitespaces_old = sum(1 for symbol in default_text if symbol.isspace())
 count_whitespaces_new = sum(1 for symbol in new_text_with_tabs if symbol.isspace())
 # printing final results
