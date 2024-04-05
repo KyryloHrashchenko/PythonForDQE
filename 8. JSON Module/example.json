@@ -1,0 +1,41 @@
+
+{
+"news_feed": [
+{
+"type": "News",
+"content": "really good news!",
+"location": "Lviv",
+"date": "17/03/2024",
+"time": "23:12"
+},
+{
+"type": "Private Ad",
+"content": "selling my PC",
+"expiration_date": "28/03/2024",
+"days_left": "10"
+},
+{
+"type": "Joke of the day",
+"content": "Terrible joke",
+"funny_meter": "2 of 10"
+},
+{
+"type": "Private Ad",
+"content": "selling my brain",
+"status": "Expired",
+"overdue_days": "6"
+},
+{
+"type": "News",
+"content": "neutral news",
+"location": "Kyiv",
+"date": "17/03/2024",
+"time": "23:22"
+},
+{
+"type": "Joke of the day",
+"content": "not bad joke!",
+"funny_meter": "9 of 10"
+}
+]
+}
