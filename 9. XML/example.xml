@@ -1,0 +1,38 @@
+<news_feed>
+    <item>
+        <type>News</type>
+        <content>really good news!</content>
+        <location>Lviv</location>
+        <date>17/03/2024</date>
+        <time>23:12</time>
+    </item>
+    <item>
+        <type>Private Ad</type>
+        <content>selling my PC</content>
+        <expiration_date>28/03/2024</expiration_date>
+        <days_left>10</days_left>
+    </item>
+    <item>
+        <type>Joke of the day</type>
+        <content>Terrible joke</content>
+        <funny_meter>2 of 10</funny_meter>
+    </item>
+    <item>
+        <type>Private Ad</type>
+        <content>selling my brain</content>
+        <status>Expired</status>
+        <overdue_days>6</overdue_days>
+    </item>
+    <item>
+        <type>News</type>
+        <content>neutral news</content>
+        <location>Kyiv</location>
+        <date>17/03/2024</date>
+        <time>23:22</time>
+    </item>
+    <item>
+        <type>Joke of the day</type>
+        <content>not bad joke!</content>
+        <funny_meter>9 of 10</funny_meter>
+    </item>
+</news_feed>
