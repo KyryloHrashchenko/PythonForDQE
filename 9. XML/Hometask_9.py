@@ -1,6 +1,6 @@
 import os
 import json
-import xml.etree.ElementTree as ET
+import xml.etree.ElementTree as Et
 
 
 class FileCopier:
@@ -151,7 +151,7 @@ class XmlParser(JsonParser):
     @staticmethod
     def parse(xml_file):
         try:
-            tree = ET.parse(xml_file)
+            tree = Et.parse(xml_file)
             root = tree.getroot()
             data = {'news_feed': []}
             for item in root.findall('item'):

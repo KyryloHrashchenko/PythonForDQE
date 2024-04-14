@@ -4,8 +4,9 @@ import random
 import csv
 import json
 import re
-from collections import Counter, defaultdict
 import xml.etree.ElementTree as Et
+import pyodbc
+from collections import Counter, defaultdict
 
 
 class NewsFeedItem:
@@ -49,16 +50,27 @@ class JokeOfTheDay(NewsFeedItem):
 
 
 class NewsFeed:
-    def __init__(self):
+    def __init__(self, database_file):
         self.feed_items = []
+        self.db_file = database_file
+        self.db = pyodbc.connect(f"DRIVER={{SQLite3 ODBC Driver}};DATABASE={self.db_file}")
 
     def add_news(self, text, city):
+        if not self.check_uniqueness('news', 'news_text', text):
+            print("Error: This news text already exists in the database. Please enter a unique news text.")
+            return
         self.feed_items.append(News(text, city))
 
     def add_private_ad(self, text, expiration_date):
+        if not self.check_uniqueness('private_ad', 'ad_text', text):
+            print("Error: This ad text already exists in the database. Please enter a unique ad text.")
+            return
         self.feed_items.append(PrivateAd(text, expiration_date))
 
     def add_joke_of_the_day(self, text):
+        if not self.check_uniqueness('joke_of_the_day', 'joke_text', text):
+            print("Error: This joke text already exists in the database. Please enter a unique joke text.")
+            return
         self.feed_items.append(JokeOfTheDay(text))
 
     def publish_to_file(self, filename, mode):
@@ -81,7 +93,8 @@ class NewsFeed:
             print("8. Word Counter")
             print("9. Parse and Copy JSON")
             print("10. Parse and Copy XML")
-            print("11. Exit")
+            print("11. Add to Database")
+            print("12. Exit")
 
             choice = input("Enter your choice: ")
 
@@ -117,6 +130,9 @@ class NewsFeed:
             elif choice == "10":
                 self.parse_and_copy_xml()
             elif choice == "11":
+                self.add_to_database()
+            elif choice == "12":
+                self.db.close()
                 break
             else:
                 print("Invalid choice. Please enter a valid option.")
@@ -193,6 +209,59 @@ class NewsFeed:
         except Exception as e:
             print("Error while copying file:", e)
             return False
+
+    def add_to_database(self):
+        while True:
+            print("\nAdd to Database Menu:")
+            print("1. Add News")
+            print("2. Add Private Ad")
+            print("3. Add Joke of the Day")
+            print("4. Exit")
+
+            choice = input("Enter your choice: ")
+
+            if choice == "1":
+                news_text = input("Enter news text: ")
+                news_city = input("Enter city: ")
+                if self.check_uniqueness('news', 'news_text', news_text):
+                    news_date = input("Enter date (format: YYYY-MM-DD HH:MM:SS): ")
+                    sql = "INSERT INTO news (news_text, news_city, news_date) VALUES (?, ?, ?)"
+                    self.db.execute(sql, (news_text, news_city, news_date))
+                    self.db.commit()
+                    print("News added to database.")
+                else:
+                    print("Error: This news text already exists in the database. Please enter a unique news text.")
+            elif choice == "2":
+                ad_text = input("Enter ad text: ")
+                if self.check_uniqueness('private_ad', 'ad_text', ad_text):
+                    actual_until = input("Enter actual until date (format: YYYY-MM-DD HH:MM:SS): ")
+                    sql = "INSERT INTO private_ad (ad_text, actual_until) VALUES (?, ?)"
+                    self.db.execute(sql, (ad_text, actual_until))
+                    self.db.commit()
+                    print("Private Ad added to database.")
+                else:
+                    print("Error: This ad text already exists in the database. Please enter a unique ad text.")
+            elif choice == "3":
+                joke_text = input("Enter joke text: ")
+                if self.check_uniqueness('joke_of_the_day', 'joke_text', joke_text):
+                    funny_meter = random.randint(1, 10)
+                    sql = "INSERT INTO joke_of_the_day (joke_text, funny_meter) VALUES (?, ?)"
+                    self.db.execute(sql, (joke_text, funny_meter))
+                    self.db.commit()
+                    print("Joke of the Day added to database.")
+                else:
+                    print("Error: This joke text already exists in the database. Please enter a unique joke text.")
+            elif choice == "4":
+                break
+            else:
+                print("Invalid choice. Please enter a valid option.")
+
+    def check_uniqueness(self, table, field, value):
+        cursor = self.db.cursor()
+        cursor.execute(f"SELECT COUNT(*) FROM {table} WHERE {field} = ?", (value,))
+        count = cursor.fetchone()[0]
+        cursor.close()
+        return count == 0
 
 
 class FileCopier:
@@ -288,8 +357,6 @@ class TextStatistics:
                                  'count_all': data['count_all'],
                                  'count_uppercase': data['count_uppercase'],
                                  'percentage': percentage})
-
-        print("Statistics were successfully written to the file:", self.output_file)
 
 
 class WordCounter:
@@ -393,5 +460,6 @@ class XmlParser(FileCopier):
 
 
 if __name__ == "__main__":
-    news_feed = NewsFeed()
+    db_file = "test.db"
+    news_feed = NewsFeed(db_file)
     news_feed.run()
